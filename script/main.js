@@ -3,13 +3,18 @@
 const nav = document.querySelector(".nav_ul")
 const formForReg = document.querySelector("#form_reg")
 const formForLogin = document.querySelector("#form_login")
+
 const formForburger = document.querySelector("#burger_form")
 const formForaccessories = document.querySelector("#accessories_form")
 const formFordipp = document.querySelector("#dipp_form")
 const formFordrink = document.querySelector("#drink_form")
 const formForother = document.querySelector("#other_form")
 
-
+const formUpdateOther  = document.querySelector("#otherUpdate_form")
+const formUpdateBurger  = document.querySelector("#burgerUpdate_form")
+const formUpdateAccessories  = document.querySelector("#accessoriesUpdate_form")
+const formUpdateDipp  = document.querySelector("#dippUpdate_form")
+const formUpdateDrink  = document.querySelector("#drinkUpdate_form")
 
 // kör functionen init när sidan laddas
 window.onload = init; 
@@ -21,28 +26,53 @@ if(formForReg) {
  
    formForReg.addEventListener("submit", registerUser)
       }
-       //om formForLogin finns ge det än addEventListener som på submit kallar functionen registerUser
+       //om formForLogin finns ge det än addEventListener som på submit kallar functionen loginUser
       if(formForLogin) {
   formForLogin.addEventListener("submit", loginUser)
 }
- //om formForburger finns ge det än addEventListener som på submit kallar functionen registerUser
+ //om formForburger finns ge det än addEventListener som på submit kallar functionen addBurger
       if(formForburger) {
   formForburger.addEventListener("submit", addBurger)
 }
-
+//om formForaccessories finns ge det än addEventListener som på submit kallar functionen addAccessories
       if(formForaccessories) {
   formForaccessories.addEventListener("submit", addAccessories)
 }
+//om formFordipp finns ge det än addEventListener som på submit kallar functionen addDipp
       if(formFordipp) {
   formFordipp.addEventListener("submit", addDipp)
 }
 
+//om formFordrink finns ge det än addEventListener som på submit kallar functionen addDrink
       if(formFordrink) {
   formFordrink.addEventListener("submit", addDrink)
 }
 
+//om formForother finns ge det än addEventListener som på submit kallar functionen addOther
       if(formForother) {
   formForother.addEventListener("submit", addOther)
+}
+//om formUpdateOther finns ge det än addEventListener som på submit kallar functionen uppdateOther
+      if(formUpdateOther) {
+  formUpdateOther.addEventListener("submit", uppdateOther)
+}
+//om formUpdateBurger finns ge det än addEventListener som på submit kallar functionen uppdateBurger
+      if(formUpdateBurger) {
+  formUpdateBurger.addEventListener("submit", uppdateBurger)
+}
+
+//om formUpdateAccessories finns ge det än addEventListener som på submit kallar functionen uppdateAccessories
+      if(formUpdateAccessories) {
+  formUpdateAccessories.addEventListener("submit", uppdateAccessories)
+}
+//om formUpdateDipp finns ge det än addEventListener som på submit kallar functionen uppdateDipp
+      if(formUpdateDipp) {
+  formUpdateDipp.addEventListener("submit", uppdateDipp)
+}
+
+//om formUpdateDrink finns ge det än addEventListener som på submit kallar functionen uppdateDrink
+      if(formUpdateDrink) {
+  formUpdateDrink.addEventListener("submit", uppdateDrink)
 }
 }
 
@@ -248,7 +278,7 @@ headers:{
 "Authorization": "Bearer " + token
 
 
-} ,   // skapar en Json sträng av car object
+} ,   // skapar en Json sträng av burgers object
 body: JSON.stringify(burgers) 
     })
 if(resp.ok) {
@@ -310,7 +340,7 @@ headers:{
 "Authorization": "Bearer " + token
 
 
-} ,   // skapar en Json sträng av car object
+} ,   // skapar en Json sträng av accessories object
 body: JSON.stringify(accessories) 
     })
 if(resp.ok) {
@@ -371,7 +401,7 @@ headers:{
 "Authorization": "Bearer " + token
 
 
-} ,   // skapar en Json sträng av car object
+} ,   // skapar en Json sträng av dipp object
 body: JSON.stringify(dipp) 
     })
 if(resp.ok) {
@@ -430,7 +460,7 @@ headers:{
 "Authorization": "Bearer " + token
 
 
-} ,   // skapar en Json sträng av car object
+} ,   // skapar en Json sträng av drink object
 body: JSON.stringify(drink) 
     })
 if(resp.ok) {
@@ -489,14 +519,357 @@ headers:{
 "Authorization": "Bearer " + token
 
 
-} ,   // skapar en Json sträng av car object
+} ,   // skapar en Json sträng av other object
 body: JSON.stringify(other) 
     })
 if(resp.ok) {
     const data = await resp.json();
     console.log(data);
-// reset formFordrink form
+// reset formForother form
     formForother.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+//function som gör att man kan uppdatera Hamburger om du är inloggad och har burger_token med ett put begären till ett api baserat på id
+async function uppdateBurger(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+
+    let id = document.getElementById("id").value;
+    let burgerNameInput = document.getElementById("burgername2").value;
+    let weightproteinInput =  document.getElementById("weightprotein2").value;
+   let  accessoriesoneInput =  document.getElementById("accessoriesone2").value;
+    let accessoriestwoInput =  document.getElementById("accessoriestwo2").value;
+       let priceoneInput =  document.getElementById("priceone2").value;
+          let pricetwoInput =  document.getElementById("pricetwo2").value;
+
+    if(!id ||!burgerNameInput || !weightproteinInput ||!accessoriesoneInput ||!accessoriestwoInput||!priceoneInput||!pricetwoInput ) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med burgername, weightprotein, accessoriesone, accessoriestwo, priceone and pricetwo
+    let burgers = {
+      burgername: burgerNameInput,
+      weightprotein: weightproteinInput,
+      accessoriesone:accessoriesoneInput,
+      accessoriestwo:accessoriestwoInput,
+        priceone:priceoneInput,
+          pricetwo:pricetwoInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett put begäran och skicka med token till http://127.0.0.1:3001/api/burgers/:id är ett api i backend delen (du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${id}`, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av burgers object
+body: JSON.stringify(burgers) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formUpdateBurger form
+    formUpdateBurger.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+
+
+//function som gör att man kan uppdaterad tillbehör om du är inloggad och har burger_token med ett put begären till ett api baserat på id
+async function uppdateAccessories(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+   let id = document.getElementById("idtwo").value;
+    let accessoriesNameInput = document.getElementById("accessoriesname2").value;
+    let accessoriesPricceInput =  document.getElementById("accessoriesprice2").value;
+   let  accessoriesContentInput =  document.getElementById("accessoriescontent2").value;
+
+
+    if(!id ||!accessoriesNameInput || !accessoriesPricceInput ||!accessoriesContentInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med accessoriesname, accessoriesprice and accessoriescontent
+    let accessories = {
+      accessoriesname: accessoriesNameInput,
+      accessoriesprice: accessoriesPricceInput,
+      accessoriescontent:accessoriesContentInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/accessories:id är ett api i backend delen(du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/accessories/${id} `, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av accessories object
+body: JSON.stringify(accessories) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formUpdateAccessories form
+    formUpdateAccessories.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+//function som gör att man kan updatera dippar om du är inloggad och har burger_token med ett put begären till ett api baserat på id 
+async function uppdateDipp(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+   let id = document.getElementById("idthree").value;
+    let dipNameInput = document.getElementById("dipsname2").value;
+    let dipPricceInput =  document.getElementById("dipsprice2").value;
+   let  dipContentInput =  document.getElementById("dipscontent2").value;
+
+
+    if(!id ||!dipNameInput || !dipPricceInput ||!dipContentInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med dipsname, dipsprice and dipscontent
+    let dipp = {
+      dipsname: dipNameInput,
+      dipsprice: dipPricceInput,
+      dipscontent:dipContentInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/dips/:id är ett api i backend delen(du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/dips/${id} `, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av dipp object
+body: JSON.stringify(dipp) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formUpdateDipp form
+    formUpdateDipp.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+//function som gör att man kan uppdater dryck om du är inloggad och har burger_token med ett put begären till ett api baserat på id
+async function uppdateDrink(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+     let id = document.getElementById("idfour").value;
+    let drinkNameInput = document.getElementById("drinkname2").value;
+    let drinkPricceInput =  document.getElementById("drinkprice2").value;
+
+
+
+    if(!drinkNameInput || !drinkPricceInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med drinkname and drinkprice
+    let drink = {
+      drinkname: drinkNameInput,
+      drinkprice: drinkPricceInput
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/drink:id är ett api i backend delen (du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/drink/${id}`, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av drink object
+body: JSON.stringify(drink) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formFordrink form
+    formUpdateDrink.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//function som gör att man kan uppdatera extra om du är inloggad och har burger_token med ett put begären till ett api baserat på id
+async function uppdateOther(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+       let id = document.getElementById("idfive").value;
+    let otherNameInput = document.getElementById("othername2").value;
+    let otherPricceInput =  document.getElementById("otherprice2").value;
+
+
+
+    if(!id ||!otherNameInput || !otherPricceInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med drinkname and drinkprice
+    let other = {
+      othername: otherNameInput,
+      otherprice: otherPricceInput
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett put begäran och skicka med token till http://127.0.0.1:3001/api/other/:id är ett api i backend delen (du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/other/${id}`, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av other object
+body: JSON.stringify(other) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formUpdateOther form
+    formUpdateOther.reset()
 
 } else {
 
