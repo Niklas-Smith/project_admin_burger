@@ -209,3 +209,306 @@ if(resp.ok) {
 }
 
 
+//function som gör att man kan lägga till Hamburger om du är inloggad och har burger_token med ett post begären till ett api
+async function addBurger(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+    let burgerNameInput = document.getElementById("burgername").value;
+    let weightproteinInput =  document.getElementById("weightprotein").value;
+   let  accessoriesoneInput =  document.getElementById("accessoriesone").value;
+    let accessoriestwoInput =  document.getElementById("accessoriestwo").value;
+       let priceoneInput =  document.getElementById("priceone").value;
+          let pricetwoInput =  document.getElementById("pricetwo").value;
+
+    if(!burgerNameInput || !weightproteinInput ||!accessoriesoneInput ||!accessoriestwoInput||!priceoneInput||!pricetwoInput ) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med burgername, weightprotein, accessoriesone, accessoriestwo, priceone and pricetwo
+    let burgers = {
+      burgername: burgerNameInput,
+      weightprotein: weightproteinInput,
+      accessoriesone:accessoriesoneInput,
+      accessoriestwo:accessoriestwoInput,
+        priceone:priceoneInput,
+          pricetwo:pricetwoInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/burgers är ett api i backend delen
+    try{
+    const resp = await fetch ("http://127.0.0.1:3001/api/burgers", {
+method : "POST",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av car object
+body: JSON.stringify(burgers) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formForburger form
+    formForburger.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+//function som gör att man kan lägga till tillbehör om du är inloggad och har burger_token med ett post begären till ett api
+async function addAccessories(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+    let accessoriesNameInput = document.getElementById("accessoriesname").value;
+    let accessoriesPricceInput =  document.getElementById("accessoriesprice").value;
+   let  accessoriesContentInput =  document.getElementById("accessoriescontent").value;
+
+
+    if(!accessoriesNameInput || !accessoriesPricceInput ||!accessoriesContentInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med accessoriesname, accessoriesprice and accessoriescontent
+    let accessories = {
+      accessoriesname: accessoriesNameInput,
+      accessoriesprice: accessoriesPricceInput,
+      accessoriescontent:accessoriesContentInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/accessories är ett api i backend delen
+    try{
+    const resp = await fetch ("http://127.0.0.1:3001/api/accessories", {
+method : "POST",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av car object
+body: JSON.stringify(accessories) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formForaccessories form
+    formForaccessories.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+//function som gör att man kan lägga till dippar om du är inloggad och har burger_token med ett post begären till ett api
+async function addDipp(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+    let dipNameInput = document.getElementById("dipsname").value;
+    let dipPricceInput =  document.getElementById("dipsprice").value;
+   let  dipContentInput =  document.getElementById("dipscontent").value;
+
+
+    if(!dipNameInput || !dipPricceInput ||!dipContentInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med dipsname, dipsprice and dipscontent
+    let dipp = {
+      dipsname: dipNameInput,
+      dipsprice: dipPricceInput,
+      dipscontent:dipContentInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/dips är ett api i backend delen
+    try{
+    const resp = await fetch ("http://127.0.0.1:3001/api/dips", {
+method : "POST",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av car object
+body: JSON.stringify(dipp) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formForaccessories form
+    formFordipp.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+//function som gör att man kan lägga till dryck om du är inloggad och har burger_token med ett post begären till ett api
+async function addDrink(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+    let drinkNameInput = document.getElementById("drinkname").value;
+    let drinkPricceInput =  document.getElementById("drinkprice").value;
+
+
+
+    if(!drinkNameInput || !drinkPricceInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med drinkname and drinkprice
+    let drink = {
+      drinkname: drinkNameInput,
+      drinkprice: drinkPricceInput
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/drink är ett api i backend delen
+    try{
+    const resp = await fetch ("http://127.0.0.1:3001/api/drink", {
+method : "POST",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av car object
+body: JSON.stringify(drink) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formFordrink form
+    formFordrink.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+//function som gör att man kan lägga till extra om du är inloggad och har burger_token med ett post begären till ett api
+async function addOther(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+    let otherNameInput = document.getElementById("othername").value;
+    let otherPricceInput =  document.getElementById("otherprice").value;
+
+
+
+    if(!otherNameInput || !otherPricceInput) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med drinkname and drinkprice
+    let other = {
+      othername: otherNameInput,
+      otherprice: otherPricceInput
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett post begäran och skicka med token till http://127.0.0.1:3001/api/other är ett api i backend delen
+    try{
+    const resp = await fetch ("http://127.0.0.1:3001/api/other", {
+method : "POST",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av car object
+body: JSON.stringify(other) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formFordrink form
+    formForother.reset()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
