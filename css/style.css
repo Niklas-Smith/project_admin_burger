@@ -24,9 +24,9 @@ margin: 0 auto;
  /*gör ccontainer max-with 2000px och att sidan blir i mitten av skärmen*/
 main{
 background-color: #faf3de;
-
 padding-top: 2em;
 box-shadow: 0 0 10px black;
+padding-bottom: 5em;
 
 }
  /*ge main background-colr , min-height , padding och box-shadow*/
@@ -94,6 +94,7 @@ footer{
 color: white;
 padding: 1em;
 
+
 }
 /*ge footer color och background-color med padding*/
 
@@ -104,3 +105,93 @@ font-size: 1.1em;
 
 }
 /*ge para_footer display flex och justify-content*/
+
+
+
+table {
+border: 1px #271a17 solid;
+background-color: #f0d78c;
+width: 50%;
+margin: auto;
+padding: 1em;
+border-collapse: collapse;
+
+}
+
+/*ger tabell border,background-color with margin och with.   */
+
+
+th, td {
+  border: 1px solid;
+  padding-bottom: 1em;
+  text-align: center;
+}
+/*ger th,td border, padding och tex-align center    */
+
+
+caption {
+font-size: 1.6em;
+margin-top: 2em;
+margin-bottom: 1em;
+color: #271a17;
+  font-weight: bold;
+
+}
+
+/*ger caption color,font-weight och margin   */
+
+
+button{
+background-color: #460404;
+color: white;
+border-radius: 1em;
+padding: 1.2em;
+cursor: pointer;
+
+}
+/*ge button background-color,color och cursor pointer med padding och border-radius*/
+
+
+
+
+form{
+border: 1px #271a17 solid;  
+background-color: #f0d78c;
+width: 60%;
+margin: auto;
+text-align: center;
+padding-top: 1em;
+padding-bottom: 1em;
+}
+/*ger from border, background-color , width med margin och padding   */
+
+
+input[type=text] {
+width: 60%;
+padding: 0.8em;
+margin-top: 0.5em;
+margin-bottom: 1em;
+
+
+}
+/*ger input[type=text] bred 70% med padding och margins.   */
+
+button[type="submit"] {
+background-color: #271a17;
+color: white;
+border-radius: 1em;
+padding: 1.2em;
+cursor: pointer;
+
+}
+
+/*ge button [type="submit"] background-color,color och cursor pointer med padding och border-radius*/
+
+h2{
+text-align: center;
+margin-bottom: 1em;
+margin-top: 2em;
+
+}
+
+/*ge h2 text-align med margin  */

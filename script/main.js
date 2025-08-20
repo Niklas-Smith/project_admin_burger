@@ -961,7 +961,7 @@ if(!resp.ok) {
  }
 
 dipsApi = await resp.json();
-
+loadDipp() 
 console.log(dipsApi);
 
  }catch(error) {
@@ -982,7 +982,7 @@ if(!resp.ok) {
  }
 
 drinkApi = await resp.json();
-
+loadDrink() 
 console.log(drinkApi);
 
  }catch(error) {
@@ -1004,7 +1004,7 @@ if(!resp.ok) {
  }
 
 otherApi = await resp.json();
-
+loadOther() 
 console.log(otherApi);
 
  }catch(error) {
@@ -1125,7 +1125,7 @@ accessoriesTrEl.appendChild(accessoriescontentEl)
 
      accessoriesTbody.appendChild(accessoriesTrEl)
 
-          // ge knapp addEventListener som med click anropa function removeBurger
+          // ge knapp addEventListener som med click anropa function removeAccessories
      accessoriesButton.addEventListener("click", removeAccessories)
 
 }
@@ -1135,9 +1135,165 @@ accessoriesTrEl.appendChild(accessoriescontentEl)
 
 
 
+/* function som skapar en del av tabell som se ut så här:
+<tr>
+    <td> information från api  </td>
+    <td> information från api </td>
+    <td> information från api </td>
+      <td> button med id från api </td>
+  </tr>
+
+*/
+function loadDipp()  {
+let dippInfo = dipsApi
+let  dippTbody = document.querySelector(".tbody_dipp")
+
+
+dippTbody.innerHTML = ""
+
+
+dippInfo.forEach(dipp => {
+    // skapar tr element
+    const dippTrEl = document.createElement("tr")
+// skapar td element med text från api 
+    const dippNameEl = document.createElement("td")
+    dippNameEl.textContent = dipp.dipsname
+   dippTrEl.appendChild(dippNameEl)
+
+// skapar td element med text från api 
+     const dipPriceEl = document.createElement("td")
+     dipPriceEl.textContent = dipp.dipsprice
+dippTrEl.appendChild(dipPriceEl)
+
+// skapar td element med text från api 
+     const dipscontentEl = document.createElement("td")
+     dipscontentEl.textContent = dipp.dipscontent
+dippTrEl.appendChild(dipscontentEl)
+
+
+// skapar knapp element med text "remove" och ger id från api 
+    const buttonTdDipp = document.createElement("td")
+   const dippButton = document.createElement("button")
+    dippButton.textContent = "Remove"
+    dippButton.id = dipp.id
+
+    buttonTdDipp.appendChild(dippButton)
+     dippTrEl.appendChild(buttonTdDipp)
+
+
+     dippTbody.appendChild(dippTrEl)
+
+          // ge knapp addEventListener som med click anropa function removeDipp
+     dippButton.addEventListener("click", removeDipp)
+
+}
+
+)
+ }
 
 
 
+/* function som skapar en del av tabell som se ut så här:
+<tr>
+    <td> information från api  </td>
+    <td> information från api </td>
+      <td> button med id från api </td>
+  </tr>
+
+*/
+function loadDrink()  {
+let drinkInfo = drinkApi
+let  drinkTbody = document.querySelector(".tbody_drink")
+
+
+drinkTbody.innerHTML = ""
+
+
+drinkInfo.forEach(drink => {
+    // skapar tr element
+    const drinkTrEl = document.createElement("tr")
+// skapar td element med text från api 
+    const drinkNameEl = document.createElement("td")
+    drinkNameEl.textContent = drink.drinkname
+   drinkTrEl.appendChild(drinkNameEl)
+
+// skapar td element med text från api 
+     const drinkPriceEl = document.createElement("td")
+     drinkPriceEl.textContent = drink.drinkprice
+drinkTrEl.appendChild(drinkPriceEl)
+
+
+// skapar knapp element med text "remove" och ger id från api 
+    const buttonTdDrink = document.createElement("td")
+   const drinkButton = document.createElement("button")
+    drinkButton.textContent = "Remove"
+    drinkButton.id = drink.id
+
+    buttonTdDrink.appendChild(drinkButton)
+     drinkTrEl.appendChild(buttonTdDrink)
+
+
+     drinkTbody.appendChild(drinkTrEl)
+
+          // ge knapp addEventListener som med click anropa function removeDrink
+     drinkButton.addEventListener("click", removeDrink)
+
+}
+
+)
+ }
+
+
+
+/* function som skapar en del av tabell som se ut så här:
+<tr>
+    <td> information från api  </td>
+    <td> information från api </td>
+      <td> button med id från api </td>
+  </tr>
+
+*/
+function loadOther()  {
+let otherInfo = otherApi
+let  otherTbody = document.querySelector(".tbody_other")
+
+
+otherTbody.innerHTML = ""
+
+
+otherInfo.forEach(other => {
+    // skapar tr element
+    const otherTrEl = document.createElement("tr")
+// skapar td element med text från api 
+    const otherNameEl = document.createElement("td")
+    otherNameEl.textContent = other.othername
+   otherTrEl.appendChild(otherNameEl)
+
+// skapar td element med text från api 
+     const otherPriceEl = document.createElement("td")
+     otherPriceEl.textContent = other.otherprice
+otherTrEl.appendChild(otherPriceEl)
+
+
+// skapar knapp element med text "remove" och ger id från api 
+    const buttonTdOther = document.createElement("td")
+   const otherButton = document.createElement("button")
+    otherButton.textContent = "Remove"
+    otherButton.id = other.id
+
+    buttonTdOther.appendChild(otherButton)
+     otherTrEl.appendChild(buttonTdOther)
+
+
+     otherTbody.appendChild(otherTrEl)
+
+          // ge knapp addEventListener som med click anropa function removeOther
+     otherButton.addEventListener("click", removeOther)
+
+}
+
+)
+ }
 
 
 
@@ -1180,6 +1336,178 @@ if(resp.ok) {
 
 
 }
+
+
+//function som gör att man ta bort från meny med ett DELETE begären till ett api
+async function removeAccessories(event)  {
+
+  
+    
+  let accessorieId = event.target.id
+
+
+    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/accessoris/${accessorieId} som är ett api i backend delen och skicka med id för ta bort rätt
+    const resp = await fetch (`http://127.0.0.1:3001/api/accessories/${accessorieId}`, {
+method : "DELETE",  
+headers:{
+"content-type": "application/json"
+
+} ,
+
+
+
+    })
+if(resp.ok) {
+
+    const data = await resp.json();
+     console.log(data)
+     getAccessories()
+
+
+}  else {
+
+    throw error;
+}
+ 
+    } catch{
+        console.log("Något blev fel")
+    }
+
+
+
+}
+
+
+
+
+
+
+//function som gör att man ta bort från meny med ett DELETE begären till ett api
+async function removeDipp(event)  {
+
+  
+    
+  let dippId = event.target.id
+
+
+    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/dips/${dippId}` som är ett api i backend delen och skicka med id för ta bort rätt
+    const resp = await fetch (`http://127.0.0.1:3001/api/dips/${dippId}`, {
+method : "DELETE",  
+headers:{
+"content-type": "application/json"
+
+} ,
+
+
+
+    })
+if(resp.ok) {
+
+    const data = await resp.json();
+     console.log(data)
+     getDips()
+
+
+}  else {
+
+    throw error;
+}
+ 
+    } catch{
+        console.log("Något blev fel")
+    }
+
+
+
+}
+
+
+
+
+
+
+//function som gör att man ta bort från meny med ett DELETE begären till ett api
+async function removeDrink(event)  {
+
+  
+    
+  let drinkId = event.target.id
+
+
+    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/dips/${drinkId} som är ett api i backend delen och skicka med id för ta bort rätt
+    const resp = await fetch (`http://127.0.0.1:3001/api/drink/${drinkId}`, {
+method : "DELETE",  
+headers:{
+"content-type": "application/json"
+
+} ,
+
+
+
+    })
+if(resp.ok) {
+
+    const data = await resp.json();
+     console.log(data)
+     getDrink()
+
+
+}  else {
+
+    throw error;
+}
+ 
+    } catch{
+        console.log("Något blev fel")
+    }
+
+
+
+}
+
+
+
+
+
+//function som gör att man ta bort från meny med ett DELETE begären till ett api
+async function removeOther(event)  {
+
+  
+    
+  let otherId = event.target.id
+
+
+    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/other/${otherId} som är ett api i backend delen och skicka med id för ta bort rätt
+    const resp = await fetch (`http://127.0.0.1:3001/api/other/${otherId}`, {
+method : "DELETE",  
+headers:{
+"content-type": "application/json"
+
+} ,
+
+
+
+    })
+if(resp.ok) {
+
+    const data = await resp.json();
+     console.log(data)
+     getOther()
+
+
+}  else {
+
+    throw error;
+}
+ 
+    } catch{
+        console.log("Något blev fel")
+    }
+
+
+
+}
+
 
 
 
