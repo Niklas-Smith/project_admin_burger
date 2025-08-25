@@ -83,12 +83,18 @@ if(formForReg) {
   formUpdateDrink.addEventListener("submit", uppdateDrink)
 }
 
-
+//om formUpdateOther finns anropa getBurgers,getAccessories,getDips,getDrink och getOther
+if(formUpdateOther) {
 getBurgers();
 getAccessories();
 getDips();
 getDrink();
 getOther();
+
+
+}
+
+
 
 }
 
@@ -110,7 +116,7 @@ function changeNav( ){
 
   } else {
         nav.innerHTML = `
-    <li><a href="/index.html"><b>Startsida</b></a></li>
+
 <li><a href="/login.html"><b>logga in</b></a></li>
 <li><a href="/register.html"><b>Registrera</b></a></li>
     
@@ -317,6 +323,300 @@ if(resp.ok) {
     }
     
 }
+
+
+
+//function som gör att man kan uppdatera Hamburger om du är inloggad och har burger_token med ett put begären till ett api baserat på id
+async function uppdateBurger(event) {
+
+
+   // gör att form inte ladda om sida
+        event.preventDefault();
+   // skapar varibler som tar input value 
+
+    let id = document.getElementById("id").value;
+    let burgerNameInput = document.getElementById("burgername2").value;
+    let weightproteinInput =  document.getElementById("weightprotein2").value;
+   let  accessoriesoneInput =  document.getElementById("accessoriesone2").value;
+    let accessoriestwoInput =  document.getElementById("accessoriestwo2").value;
+       let priceoneInput =  document.getElementById("priceone2").value;
+          let pricetwoInput =  document.getElementById("pricetwo2").value;
+
+    if(!id ||!burgerNameInput || !weightproteinInput ||!accessoriesoneInput ||!accessoriestwoInput||!priceoneInput||!pricetwoInput ) {
+       console.log("måste fylla i alla fält")
+     return
+    }
+      // skapar ett object med burgername, weightprotein, accessoriesone, accessoriestwo, priceone and pricetwo
+    let burgers = {
+      burgername: burgerNameInput,
+      weightprotein: weightproteinInput,
+      accessoriesone:accessoriesoneInput,
+      accessoriestwo:accessoriestwoInput,
+        priceone:priceoneInput,
+          pricetwo:pricetwoInput
+
+    }
+   // skapar ett varibler som hämtar in burger_token från localStorage
+const token = localStorage.getItem("burger_token")
+    // gör ett put begäran och skicka med token till http://127.0.0.1:3001/api/burgers/:id är ett api i backend delen (du skickar med id)
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${id}`, {
+method : "PUT",
+headers:{
+"content-type": "application/json",
+"Authorization": "Bearer " + token
+
+
+} ,   // skapar en Json sträng av burgers object
+body: JSON.stringify(burgers) 
+    })
+if(resp.ok) {
+    const data = await resp.json();
+    console.log(data);
+// reset formUpdateBurger form
+    formUpdateBurger.reset()
+    getBurgers()
+
+} else {
+
+    throw error;
+}
+
+ 
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+
+
+
+
+//function som hämtar data från http://127.0.0.1:3001/api/burgers och lagra i tom array burgerApi
+
+async function getBurgers()  {
+try {
+
+const resp = await fetch ("http://127.0.0.1:3001/api/burgers")
+
+
+if(!resp.ok) {
+ throw new error("Något blev fel...")
+    
+ }
+
+burgerApi = await resp.json();
+
+loadBurgers()
+
+ }catch(error) {
+ console.error(error); }
+ 
+}
+//function som hämtar data från http://127.0.0.1:3001/api/accessories och lagra i tom array accessoriesApi
+async function getAccessories()  {
+try {
+
+const resp = await fetch ("http://127.0.0.1:3001/api/accessories")
+
+
+if(!resp.ok) {
+ throw new error("Något blev fel...")
+    
+ }
+
+accessoriesApi = await resp.json();
+loadAccessories()
+
+
+ }catch(error) {
+ console.error(error); }
+ 
+}
+
+
+
+
+/* function som skapar en del av tabell som se ut så här:
+<tr>
+    <td> information från api  </td>
+    <td> information från api </td>
+    <td> information från api </td>
+     <td> information från api </td>
+      <td> button med id från api </td>
+  </tr>
+
+*/
+function loadBurgers()  {
+let burgerInfo = burgerApi
+let burgerTbody = document.querySelector(".tbody_burger")
+
+
+burgerTbody.innerHTML = ""
+
+
+burgerInfo.forEach(burger => {
+    // skapar tr element
+    const burgerTrEl = document.createElement("tr")
+// skapar td element med text från api 
+    const burgerNameEl = document.createElement("td")
+    burgerNameEl.textContent = burger.burgername
+     burgerTrEl.appendChild(burgerNameEl)
+
+// skapar td element med text från api 
+     const accessoriesoneEl = document.createElement("td")
+     accessoriesoneEl.textContent = burger.accessoriesone
+burgerTrEl.appendChild(accessoriesoneEl)
+
+// skapar td element med text från api 
+     const priceOneEl = document.createElement("td")
+     priceOneEl.textContent = burger.priceone
+burgerTrEl.appendChild(priceOneEl)
+
+// skapar td element med text från api 
+     const priceTwoEl = document.createElement("td")
+     priceTwoEl.textContent = burger.pricetwo
+burgerTrEl.appendChild(priceTwoEl)
+// skapar knapp element med text "Ta Bort" och ger id från api 
+    const buttonTd = document.createElement("td")
+   const burgerButton = document.createElement("button")
+    burgerButton.textContent = "Ta Bort"
+    burgerButton.id = burger.id
+
+    buttonTd.appendChild(burgerButton)
+     burgerTrEl.appendChild(buttonTd)
+     // ge knapp addEventListener som med click anropa function removeBurger
+     burgerButton.addEventListener("click", removeBurger)
+
+// skapar knappen element med text "ändra" och ger id från api. också ge det ett className. 
+    const buttonEditTd = document.createElement("td")
+   const burgerEditButton = document.createElement("button")
+    burgerEditButton.textContent = "ändra"
+    burgerEditButton.id = burger.id
+    burgerEditButton.className  = "editButton"
+
+    buttonEditTd.appendChild(burgerEditButton)
+     burgerTrEl.appendChild(buttonEditTd)
+     // ge knappen addEventListener som med click anropa function fillInBurger
+     burgerEditButton.addEventListener("click", fillInBurger)
+
+
+
+
+     burgerTbody.appendChild(burgerTrEl)
+
+}
+
+)
+ }
+
+
+
+
+//function som gör att man ta bort från meny med ett DELETE begären till ett api
+async function removeBurger(event)  {
+
+  
+    
+  let burgerId = event.target.id
+
+
+    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/burgers/${burgerId} som är ett api i backend delen och skicka med id för ta bort rätt
+    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${burgerId}`, {
+method : "DELETE",  
+headers:{
+"content-type": "application/json"
+
+} ,
+
+
+
+    })
+if(resp.ok) {
+
+    const data = await resp.json();
+     console.log(data)
+     getBurgers()
+
+
+}  else {
+
+    throw error;
+}
+ 
+    } catch{
+        console.log("Något blev fel")
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+//function som gör att man kan hämtar in information från ett api (get) med hjälp av id
+async function fillInBurger(event) {
+let burgerId = event.target.id
+
+
+ // gör ett fetch anrop till http://127.0.0.1:3001/api/burgers/${burgerId}  skicka med id
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${burgerId}`)
+
+    
+if(resp.ok) {
+    const data = await resp.json();
+
+    fillInBurgerByid(data)
+
+} else {
+
+    throw error;
+}
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+//function som fyller i hamburgare formen med värden baserat på id (hämtas från api)
+function fillInBurgerByid (data){
+
+
+document.getElementById("id").value = data[0].id;
+document.getElementById("burgername2").value = data[0].burgername;
+document.getElementById("weightprotein2").value = data[0].weightprotein;
+document.getElementById("accessoriesone2").value = data[0].accessoriesone;
+document.getElementById("accessoriestwo2").value = data[0].accessoriestwo;
+document.getElementById("priceone2").value = data[0].priceone;
+document.getElementById("pricetwo2").value = data[0].pricetwo;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -568,71 +868,6 @@ if(resp.ok) {
 
 
 
-//function som gör att man kan uppdatera Hamburger om du är inloggad och har burger_token med ett put begären till ett api baserat på id
-async function uppdateBurger(event) {
-
-
-   // gör att form inte ladda om sida
-        event.preventDefault();
-   // skapar varibler som tar input value 
-
-    let id = document.getElementById("id").value;
-    let burgerNameInput = document.getElementById("burgername2").value;
-    let weightproteinInput =  document.getElementById("weightprotein2").value;
-   let  accessoriesoneInput =  document.getElementById("accessoriesone2").value;
-    let accessoriestwoInput =  document.getElementById("accessoriestwo2").value;
-       let priceoneInput =  document.getElementById("priceone2").value;
-          let pricetwoInput =  document.getElementById("pricetwo2").value;
-
-    if(!id ||!burgerNameInput || !weightproteinInput ||!accessoriesoneInput ||!accessoriestwoInput||!priceoneInput||!pricetwoInput ) {
-       console.log("måste fylla i alla fält")
-     return
-    }
-      // skapar ett object med burgername, weightprotein, accessoriesone, accessoriestwo, priceone and pricetwo
-    let burgers = {
-      burgername: burgerNameInput,
-      weightprotein: weightproteinInput,
-      accessoriesone:accessoriesoneInput,
-      accessoriestwo:accessoriestwoInput,
-        priceone:priceoneInput,
-          pricetwo:pricetwoInput
-
-    }
-   // skapar ett varibler som hämtar in burger_token från localStorage
-const token = localStorage.getItem("burger_token")
-    // gör ett put begäran och skicka med token till http://127.0.0.1:3001/api/burgers/:id är ett api i backend delen (du skickar med id)
-    try{
-    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${id}`, {
-method : "PUT",
-headers:{
-"content-type": "application/json",
-"Authorization": "Bearer " + token
-
-
-} ,   // skapar en Json sträng av burgers object
-body: JSON.stringify(burgers) 
-    })
-if(resp.ok) {
-    const data = await resp.json();
-    console.log(data);
-// reset formUpdateBurger form
-    formUpdateBurger.reset()
-
-} else {
-
-    throw error;
-}
-
- 
-
-
-    } catch (error){
-        console.log("Något blev fel" + error );
-
-    }
-    
-}
-
 
 
 
@@ -682,6 +917,7 @@ if(resp.ok) {
     console.log(data);
 // reset formUpdateAccessories form
     formUpdateAccessories.reset()
+    getAccessories()
 
 } else {
 
@@ -749,6 +985,7 @@ if(resp.ok) {
     console.log(data);
 // reset formUpdateDipp form
     formUpdateDipp.reset()
+      getDips()
 
 } else {
 
@@ -816,6 +1053,7 @@ if(resp.ok) {
     console.log(data);
 // reset formFordrink form
     formUpdateDrink.reset()
+    getDrink()
 
 } else {
 
@@ -886,6 +1124,7 @@ if(resp.ok) {
     console.log(data);
 // reset formUpdateOther form
     formUpdateOther.reset()
+    getOther()
 
 } else {
 
@@ -904,47 +1143,6 @@ if(resp.ok) {
 
 
 
-//function som hämtar data från http://127.0.0.1:3001/api/burgers och lagra i tom array burgerApi
-
-async function getBurgers()  {
-try {
-
-const resp = await fetch ("http://127.0.0.1:3001/api/burgers")
-
-
-if(!resp.ok) {
- throw new error("Något blev fel...")
-    
- }
-
-burgerApi = await resp.json();
-
-loadBurgers()
-
- }catch(error) {
- console.error(error); }
- 
-}
-//function som hämtar data från http://127.0.0.1:3001/api/accessories och lagra i tom array accessoriesApi
-async function getAccessories()  {
-try {
-
-const resp = await fetch ("http://127.0.0.1:3001/api/accessories")
-
-
-if(!resp.ok) {
- throw new error("Något blev fel...")
-    
- }
-
-accessoriesApi = await resp.json();
-loadAccessories()
-console.log(accessoriesApi);
-
- }catch(error) {
- console.error(error); }
- 
-}
 
 
 
@@ -962,7 +1160,7 @@ if(!resp.ok) {
 
 dipsApi = await resp.json();
 loadDipp() 
-console.log(dipsApi);
+
 
  }catch(error) {
  console.error(error); }
@@ -983,7 +1181,7 @@ if(!resp.ok) {
 
 drinkApi = await resp.json();
 loadDrink() 
-console.log(drinkApi);
+
 
  }catch(error) {
  console.error(error); }
@@ -1005,7 +1203,7 @@ if(!resp.ok) {
 
 otherApi = await resp.json();
 loadOther() 
-console.log(otherApi);
+
 
  }catch(error) {
  console.error(error); }
@@ -1016,63 +1214,6 @@ console.log(otherApi);
 
 
 
-/* function som skapar en del av tabell som se ut så här:
-<tr>
-    <td> information från api  </td>
-    <td> information från api </td>
-    <td> information från api </td>
-     <td> information från api </td>
-      <td> button med id från api </td>
-  </tr>
-
-*/
-function loadBurgers()  {
-let burgerInfo = burgerApi
-let burgerTbody = document.querySelector(".tbody_burger")
-
-
-burgerTbody.innerHTML = ""
-
-
-burgerInfo.forEach(burger => {
-    // skapar tr element
-    const burgerTrEl = document.createElement("tr")
-// skapar td element med text från api 
-    const burgerNameEl = document.createElement("td")
-    burgerNameEl.textContent = burger.burgername
-     burgerTrEl.appendChild(burgerNameEl)
-
-// skapar td element med text från api 
-     const accessoriesoneEl = document.createElement("td")
-     accessoriesoneEl.textContent = burger.accessoriesone
-burgerTrEl.appendChild(accessoriesoneEl)
-
-// skapar td element med text från api 
-     const priceOneEl = document.createElement("td")
-     priceOneEl.textContent = burger.priceone
-burgerTrEl.appendChild(priceOneEl)
-
-// skapar td element med text från api 
-     const priceTwoEl = document.createElement("td")
-     priceTwoEl.textContent = burger.priceone
-burgerTrEl.appendChild(priceTwoEl)
-// skapar knapp element med text "remove" och ger id från api 
-    const buttonTd = document.createElement("td")
-   const burgerButton = document.createElement("button")
-    burgerButton.textContent = "Remove"
-    burgerButton.id = burger.id
-
-    buttonTd.appendChild(burgerButton)
-     burgerTrEl.appendChild(buttonTd)
-     // ge knapp addEventListener som med click anropa function removeBurger
-     burgerButton.addEventListener("click", removeBurger)
-
-     burgerTbody.appendChild(burgerTrEl)
-
-}
-
-)
- }
 
 
 
@@ -1113,20 +1254,34 @@ accessoriesTrEl.appendChild(accessoriesPriceEl)
 accessoriesTrEl.appendChild(accessoriescontentEl)
 
 
-// skapar knapp element med text "remove" och ger id från api 
+// skapar knapp element med text "Ta Bort" och ger id från api 
     const buttonTdAccessories = document.createElement("td")
    const accessoriesButton = document.createElement("button")
-    accessoriesButton.textContent = "Remove"
+    accessoriesButton.textContent = "Ta Bort"
     accessoriesButton.id = accessorie.id
 
     buttonTdAccessories.appendChild(accessoriesButton)
      accessoriesTrEl.appendChild(buttonTdAccessories)
 
 
+// skapar knapp element med text "ändra" och ger id från api. också ge det ett className. 
+    const buttonEditTd = document.createElement("td")
+   const accessoriesEditButton = document.createElement("button")
+      accessoriesEditButton.textContent = "ändra"
+     accessoriesEditButton.id = accessorie.id
+      accessoriesEditButton.className  = "editButton"
+
+    buttonEditTd.appendChild(accessoriesEditButton)
+     accessoriesTrEl.appendChild(buttonEditTd)
+ 
+  
+
      accessoriesTbody.appendChild(accessoriesTrEl)
 
-          // ge knapp addEventListener som med click anropa function removeAccessories
+          // ge knappen addEventListener som med click anropa function removeAccessories
      accessoriesButton.addEventListener("click", removeAccessories)
+         // ge knappen addEventListener som med click anropa function fillInAccessories
+     accessoriesEditButton.addEventListener("click", fillInAccessories)
 
 }
 
@@ -1171,20 +1326,32 @@ dippTrEl.appendChild(dipPriceEl)
 dippTrEl.appendChild(dipscontentEl)
 
 
-// skapar knapp element med text "remove" och ger id från api 
+// skapar knapp element med text "Ta Bort" och ger id från api 
     const buttonTdDipp = document.createElement("td")
    const dippButton = document.createElement("button")
-    dippButton.textContent = "Remove"
+    dippButton.textContent = "Ta Bort"
     dippButton.id = dipp.id
 
     buttonTdDipp.appendChild(dippButton)
      dippTrEl.appendChild(buttonTdDipp)
 
 
+// skapar knapp element med text "ändra" och ger id från api. också ge det ett className. 
+    const buttonEditTd = document.createElement("td")
+   const dippEditButton = document.createElement("button")
+      dippEditButton.textContent = "ändra"
+    dippEditButton.id = dipp.id
+      dippEditButton.className  = "editButton"
+
+    buttonEditTd.appendChild(dippEditButton)
+     dippTrEl.appendChild(buttonEditTd)
+
      dippTbody.appendChild(dippTrEl)
 
           // ge knapp addEventListener som med click anropa function removeDipp
      dippButton.addEventListener("click", removeDipp)
+           // ge knappen addEventListener som med click anropa function fillIndipp
+     dippEditButton.addEventListener("click", fillInDipp)
 
 }
 
@@ -1223,20 +1390,33 @@ drinkInfo.forEach(drink => {
 drinkTrEl.appendChild(drinkPriceEl)
 
 
-// skapar knapp element med text "remove" och ger id från api 
+// skapar knapp element med text "Ta Bort" och ger id från api 
     const buttonTdDrink = document.createElement("td")
    const drinkButton = document.createElement("button")
-    drinkButton.textContent = "Remove"
+    drinkButton.textContent = "Ta Bort"
     drinkButton.id = drink.id
 
     buttonTdDrink.appendChild(drinkButton)
      drinkTrEl.appendChild(buttonTdDrink)
+
+// skapar knapp element med text "ändra" och ger id från api. också ge det ett className. 
+    const buttonEditTd = document.createElement("td")
+   const drinkEditButton = document.createElement("button")
+      drinkEditButton.textContent = "ändra"
+    drinkEditButton.id = drink.id
+      drinkEditButton.className  = "editButton"
+
+    buttonEditTd.appendChild(drinkEditButton)
+     drinkTrEl.appendChild(buttonEditTd)
+
 
 
      drinkTbody.appendChild(drinkTrEl)
 
           // ge knapp addEventListener som med click anropa function removeDrink
      drinkButton.addEventListener("click", removeDrink)
+      // ge knappen addEventListener som med click anropa function fillInDrink
+     drinkEditButton.addEventListener("click", fillInDrink)
 
 }
 
@@ -1275,20 +1455,32 @@ otherInfo.forEach(other => {
 otherTrEl.appendChild(otherPriceEl)
 
 
-// skapar knapp element med text "remove" och ger id från api 
+// skapar knapp element med text "Ta Bort" och ger id från api 
     const buttonTdOther = document.createElement("td")
    const otherButton = document.createElement("button")
-    otherButton.textContent = "Remove"
+    otherButton.textContent = "Ta Bort"
     otherButton.id = other.id
 
     buttonTdOther.appendChild(otherButton)
      otherTrEl.appendChild(buttonTdOther)
+// skapar knapp element med text "ändra" och ger id från api. också ge det ett className. 
+    const buttonEditTd = document.createElement("td")
+   const otherEditButton = document.createElement("button")
+      otherEditButton.textContent = "ändra"
+    otherEditButton.id = other.id
+      otherEditButton.className  = "editButton"
 
+    buttonEditTd.appendChild(otherEditButton)
+     otherTrEl.appendChild(buttonEditTd)
 
      otherTbody.appendChild(otherTrEl)
 
           // ge knapp addEventListener som med click anropa function removeOther
      otherButton.addEventListener("click", removeOther)
+
+           // ge knappen addEventListener som med click anropa function fillInOther
+     otherEditButton.addEventListener("click", fillInOther)
+
 
 }
 
@@ -1297,45 +1489,6 @@ otherTrEl.appendChild(otherPriceEl)
 
 
 
-
-//function som gör att man ta bort från meny med ett DELETE begären till ett api
-async function removeBurger(event)  {
-
-  
-    
-  let burgerId = event.target.id
-
-
-    try{  // gör ett DELETE begäran till http://127.0.0.1:3001/api/burgers/${burgerId} som är ett api i backend delen och skicka med id för ta bort rätt
-    const resp = await fetch (`http://127.0.0.1:3001/api/burgers/${burgerId}`, {
-method : "DELETE",  
-headers:{
-"content-type": "application/json"
-
-} ,
-
-
-
-    })
-if(resp.ok) {
-
-    const data = await resp.json();
-     console.log(data)
-     getBurgers()
-
-
-}  else {
-
-    throw error;
-}
- 
-    } catch{
-        console.log("Något blev fel")
-    }
-
-
-
-}
 
 
 //function som gör att man ta bort från meny med ett DELETE begären till ett api
@@ -1511,3 +1664,181 @@ if(resp.ok) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+//function som gör att man kan hämtar in information från ett api (get) med hjälp av id
+async function fillInAccessories(event) {
+let accessoriesId = event.target.id
+
+
+ // gör ett fetch anrop till http://127.0.0.1:3001/api/accessories/${accessoriesId}  skicka med id
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/accessories/${accessoriesId}`)
+
+    
+if(resp.ok) {
+    const data = await resp.json();
+
+    fillInaccessoriesByid(data)
+
+} else {
+
+    throw error;
+}
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+//function som fyller i accessories formen med värden baserat på id (hämtas från api)
+function fillInaccessoriesByid (data){
+
+console.log(data)
+
+document.getElementById("idtwo").value = data[0].id;
+document.getElementById("accessoriesname2").value = data[0].accessoriesname;
+document.getElementById("accessoriesprice2").value = data[0].accessoriesprice;
+document.getElementById("accessoriescontent2").value = data[0].accessoriescontent;
+
+}
+
+
+
+//function som gör att man kan hämtar in information från ett api (get) med hjälp av id
+async function fillInDipp(event) {
+let dippId = event.target.id
+
+
+ // gör ett fetch anrop till http://127.0.0.1:3001/api/dips/${dippId}  skicka med id
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/dips/${dippId}`)
+
+    
+if(resp.ok) {
+    const data = await resp.json();
+
+    fillInDippByid(data)
+
+} else {
+
+    throw error;
+}
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+//function som fyller i dipp formen med värden baserat på id (hämtas från api)
+function fillInDippByid (data){
+
+console.log(data)
+
+document.getElementById("idthree").value = data[0].id;
+document.getElementById("dipsname2").value = data[0].dipsname;
+document.getElementById("dipsprice2").value = data[0].dipsprice;
+document.getElementById("dipscontent2").value = data[0].dipscontent;
+
+}
+
+
+
+
+
+//function som gör att man kan hämtar in information från ett api (get) med hjälp av id
+async function fillInDrink(event) {
+let drinkId = event.target.id
+
+
+ // gör ett fetch anrop till http://127.0.0.1:3001/api/drink/${drinkId}`  skicka med id
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/drink/${drinkId}`)
+
+    
+if(resp.ok) {
+    const data = await resp.json();
+
+    fillInDrinkByid(data)
+
+} else {
+
+    throw error;
+}
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+//function som fyller i drink formen med värden baserat på id (hämtas från api)
+function fillInDrinkByid (data){
+
+console.log(data)
+
+document.getElementById("idfour").value = data[0].id;
+document.getElementById("drinkname2").value = data[0].drinkname;
+document.getElementById("drinkprice2").value = data[0].drinkprice;
+
+}
+
+
+
+
+
+
+//function som gör att man kan hämtar in information från ett api (get) med hjälp av id
+async function fillInOther(event) {
+let otherId = event.target.id
+
+
+ // gör ett fetch anrop till http://127.0.0.1:3001/api/other/${otherId}`  skicka med id
+    try{
+    const resp = await fetch (`http://127.0.0.1:3001/api/other/${otherId}`)
+
+    
+if(resp.ok) {
+    const data = await resp.json();
+
+    fillInOtherByid(data)
+
+} else {
+
+    throw error;
+}
+
+
+    } catch (error){
+        console.log("Något blev fel" + error );
+
+    }
+    
+}
+
+//function som fyller i extra formen med värden baserat på id (hämtas från api)
+function fillInOtherByid (data){
+
+console.log(data)
+
+document.getElementById("idfive").value = data[0].id;
+document.getElementById("othername2").value = data[0].othername;
+document.getElementById("otherprice2").value = data[0].otherprice;
+
+}

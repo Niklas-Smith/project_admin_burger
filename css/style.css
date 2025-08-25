@@ -195,3 +195,19 @@ margin-top: 2em;
 }
 
 /*ge h2 text-align med margin  */
+
+.editButton {
+
+
+  background-color: #271a17;
+color: white;
+border-radius: 1em;
+padding: 1.2em;
+cursor: pointer;
+
+}
+
+
+/*ge editButton background-color,color och cursor pointer med padding och border-radius*/
+
+

@@ -19,15 +19,35 @@
 <li> <a href="/burger.html"><b>Burger</b></a></li> 
 <li> <a href="/login.html" id="login_button"><b>Login</b></a></li> 
 <li><a href="/register.html"><b>Registrera</b></a></li>
+     <script src="script/checktoken.js"></script>
 </ul>
 </nav>
 </header>
 <main>
 <!-- Header med logo och navigations link -->
+
+
+<table >
+<caption>Hamburgare tabell:</caption>
+<thead>
+  <tr>
+<th>namn:</th>
+<th>Tillbehör ett</th>
+<th>pris utan</th>
+<th>pris med</th>
+<th>Ta Bort</th>
+</tr>
+</thead>
+<tbody class="tbody_burger">
+
+</tbody>
+</table>
+<!-- skapar en table med mina hamburgare-->
+
+
 <h2>Uppdatera Hamburger:</h2>
   <form id="burgerUpdate_form">
-    <label for="id">Id:</label> <br>
-<input type="text" id="id" name="id">
+<input type="hidden" id="id" name="id">
 <br>
 <label for="burgername2">Name:</label>
 <br>
@@ -54,26 +74,9 @@
 <input type="text" id="pricetwo2" name="pricetwo2">
 <br>
 <button type="submit">Uppdatera Hamburger</button>
-</form>
+</form> 
 
-<table >
-<caption>Hamburgare:</caption>
-<thead>
-  <tr>
-<th>namn:</th>
-<th>Tillbehör ett</th>
-<th>pris utan</th>
-<th>pris med</th>
-<th>Ta Bort</th>
-</tr>
-</thead>
-<tbody class="tbody_burger">
-
-   
-</tbody>
-</table>
-
-
+<!--Create a form with id,burgername,weightprotein,accessoriesone,accessoriestwo,priceone and pricetwo -->
 
 <table >
 <caption>Tillbehör:</caption>
@@ -87,10 +90,32 @@
 </thead>
 <tbody class="tbody_accessories">
 
-   
 </tbody>
 </table>
+<!-- skapar en table med mina tillbehör-->
 
+
+<h2>Uppdatera Tillbehör:</h2>
+  <form id="accessoriesUpdate_form">
+     
+<input type="hidden" id="idtwo" name="idtwo">
+<br>
+<label for="accessoriesname2">Name:</label>
+<br>
+<input type="text" id="accessoriesname2" name="accessoriesname2">
+<br>
+<label for="accessoriesprice2">Pris:</label>
+<br>
+<input type="text" id="accessoriesprice2" name="accessoriesprice2">
+<br>
+<label for="accessoriescontent2">Innehåll:</label>
+<br>
+<input type="text" id="accessoriescontent2" name="accessoriescontent2">
+<br>
+<button type="submit">Uppdater Tillbehör</button>
+</form>
+
+<!--Create a form with id,accessoriesname,accessoriesprice and accessoriescontent -->
 
 
 <table >
@@ -108,9 +133,30 @@
    
 </tbody>
 </table>
+<!-- skapar en table med mina dippor-->
 
 
+<h2>Uppdater Dipp:</h2>
 
+  <form id="dippUpdate_form">
+      
+<input type="hidden" id="idthree" name="idthree"> <br>
+<label for="dipsname2">Name:</label>
+<br>
+<input type="text" id="dipsname2" name="dipsname2">
+<br>
+<label for="dipsprice2">Pris::</label>
+<br>
+<input type="text" id="dipsprice2" name="dipsprice2">
+<br>
+<label for="dipscontent2">Innehåll:</label>
+<br>
+<input type="text" id="dipscontent2" name="dipscontent2">
+<br>
+<button type="submit">Uppdater Dipp</button>
+</form>
+
+<!--Create a form with id,dipsname,dipsprice and dipscontent -->
 
 
 <table >
@@ -127,6 +173,25 @@
    
 </tbody>
 </table>
+<!-- skapar en table med mina dryckor-->
+
+
+<h2>Uppdatera Dryck:</h2>
+  <form id="drinkUpdate_form">
+    
+
+<input type="hidden" id="idfour" name="idfour"> <br>
+<label for="drinkname2">Name:</label>
+<br>
+<input type="text" id="drinkname2" name="drinkname2">
+<br>
+<label for="drinkprice2">Pris:</label>
+<br>
+<input type="text" id="drinkprice2" name="drinkprice2">
+<br>
+<button type="submit">Uppdater Dryck</button>
+</form>
+<!--Create a form with id,drinkname and drinkprice -->
 
 <table >
 <caption>Övrigt:</caption>
@@ -142,6 +207,24 @@
    
 </tbody>
 </table>
+<!-- skapar en table med mina övrigt-->
+ 
+<h2>Uppdatera Övrigt:</h2>
+  <form id="otherUpdate_form">
+<input type="hidden" id="idfive" name="idfive"> <br>
+<label for="othername2">Name:</label>
+<br>
+<input type="text" id="othername2" name="othername2">
+<br>
+<label for="otherprice2">Pris::</label>
+<br>
+<input type="text" id="otherprice2" name="otherprice2">
+<br>
+<button type="submit">Uppdatera Övrigt</button>
+</form>
+
+<!--Create a form with id,drinkname and drinkprice -->
+
 
 <!-- 
 <div id="burger_div">
